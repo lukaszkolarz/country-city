@@ -8,17 +8,17 @@ def generator():
     generate = random.randint(0, k)
     letter = marks[generate]
     return letter
-server = "192.168.1.45"
-port = 8104
+server = "172.19.127.251"
+port = 8107
 s = sc.socket(sc.AF_INET, sc.SOCK_STREAM)
 s.bind((server,port))
 s.listen(5)
 print("Waiting for a connection")
 
 
-def threaded_client(clientsocket):
+def threaded_client(clientsocket, player):
 
-    clientsocket.send(str.encode("Connected Jaki masz login"))
+    clientsocket.send(str.encode("    Connected Jaki masz login"))
     login = clientsocket.recv(1024) #tutaj powinien odebrac login
     reply = login.decode("utf-8")
     print(reply)
@@ -49,13 +49,13 @@ def threaded_client(clientsocket):
     print("Lost connection ")
     clientsocket.close()
 
-#current_players = 0
+current_players = 0
 while True:
     clientsocket , address = s.accept()
     print("Connection from :",address)
     clientsocket.send(bytes("Connected with server","utf-8"))
-    start_new_thread(threaded_client,(clientsocket,))
-    #current_players +=1
+    start_new_thread(threaded_client,(clientsocket,current_players))
+    current_players +=1
 
 
 
