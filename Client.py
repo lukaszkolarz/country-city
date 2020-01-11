@@ -1,39 +1,51 @@
 import socket as sc
-from Network import Net
-from Game import Game
-
-def Client():
-    fields = []
-    k = Game()
-    n = Net()
-    
-    print(n.receive())
-    x = n.send(input())#podawany login
-    print(x) # odebranie wiadomosci konczącej sesje powitalna
-    while True:
-        try:
-            litera = n.receive()
-            print("Uzupełnij pola wyrazami zaczynającymi się od :",litera)
-            break
-            #n.send("Odebrano pokiet")
-            #print("Państwo, Miasto , Zwięrze, Roślina, Rzecz")
-            #vector = k.fiel()
-            #for i in range(5):
-                #n.send((vector[i]))
-
-            #k.clear()
-
-        except:
-            break
+import Network as net
+import Game as gm
 
 
-Client()
+print("Hello, insert server IP:")
+ip = "192.168.1.80"       #input()
 
+session = gm.Game(ip)
 
+print("\nInsert your nick:")
+nick = input()
 
+session.setNick(nick)
+session.send(nick)
 
+msg = ''
 
+while msg != "no":
+    letter = session.recvLetter()
+    print(letter + "\n")
 
+    print("Insert your answers:")
+    print("country:")
+    country = input()
+    print("city:")
+    city = input()
+    print("animal:")
+    animal = input()
+    print("plant:")
+    plant = input()
+    print("item:")
+    item = input()
 
+    session.buildVector(country, city, animal, plant, item)
+    session.sendVector(session.vector)
 
+    if session.ID == 0:
+        session.recvCheck()
+        #checking procedure
+        session.sendCheckBack()
+    else:
+        session.recvNotCheck()
 
+    points = session.recvPoints()
+    #display points
+    print("Your score" + session.findMyPoint() + "\n")
+    print("Would u like to play again? / \"no\" for not")
+    msg = input()
+
+session.end()
