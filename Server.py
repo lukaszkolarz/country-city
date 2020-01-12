@@ -39,7 +39,7 @@ log.basicConfig(filename="server.log", level=log.DEBUG)
 k = G_server()
 server = "192.168.1.45"
 port = 8000
-s = sc.socket(sc.AF_INET, sc.SOCK_SEQPACKET, sc.IPPROTO_SCTP)
+s = sc.socket(sc.AF_INET, sc.SOCK_STREAM, sc.IPPROTO_SCTP)
 s.bind((server, port))
 s.listen(5)
 print("Waiting for a connection")
