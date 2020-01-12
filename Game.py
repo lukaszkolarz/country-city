@@ -2,6 +2,7 @@ import Network as net
 import logging as log
 import pickle
 
+
 class Game(net.Network):
     def __init__(self, ip):
         net.Network.__init__(self, ip)
