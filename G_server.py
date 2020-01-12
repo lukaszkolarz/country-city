@@ -38,7 +38,16 @@ class G_server:
             score[i][1] = self.vector[i][6]
         return score
 
+    def vecscore(self,player):
+        vector = []
+        for i in range(player):
+            vector[i][0] = self.vector[i][0]
+            vector[i][1] = self.ve[i][6]
+        return vector
 
     def clear(self):
         self.vector = []
-
+    def fill(self,vec,player):
+        for j in range(player):
+            for i in range(6):
+                self.vector[player][i] = vec[player][i]
