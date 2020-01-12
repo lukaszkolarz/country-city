@@ -15,7 +15,7 @@ class Game(net.Network):
 
     def sendVector(self, vector):
         self.client.send(pickle.dumps(vector))
-        log.info(vector + " answers sent")
+        log.info(vector[0] + " answers sent")
 
     def buildVector(self, country, city, animal, plant, item):
         self.vector = [self.nick, country, city, animal, plant, item]
