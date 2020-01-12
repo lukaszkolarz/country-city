@@ -14,9 +14,8 @@ class Game(net.Network):
         self.check = []
 
     def sendVector(self, vector):
-        for i in range(6):
-            self.send(vector[i])
-        log.info(vector[0] + " answers sent")
+        self.client.send(pickle.dumps(vector))
+        log.info(vector + " answers sent")
 
     def buildVector(self, country, city, animal, plant, item):
         self.vector = [self.nick, country, city, animal, plant, item]
@@ -29,19 +28,12 @@ class Game(net.Network):
         return self.letter
 
     def recvCheck(self):
-        self.playersCount = int(self.recv())
-        answers = []
-        for i in range(playersCount):
-            temp = []
-            for j in range(6):
-                temp.append(self.recv())
-            answers.append(temp)
-        self.check = answers
+        vector = pickle.loads(self.client.recv(2048))
+        return vector
 
-    def sendCheckBack(self):
-        for i in range(self.playersCount):
-            for j in self.check[i]:
-                self.send(j)
+    def sendCheckBack(self,vector):
+        self.client.send(pickle.dumps(vector))
+
 
     def recvNotCheck(self):
         self.playersCount = int(self.recv())
@@ -49,11 +41,7 @@ class Game(net.Network):
 
     def recvPoints(self):
         points = []
-        for i in range(self.playersCount):
-            temp = []
-            for j in range(2):
-                temp.append(self.recv())
-            points.append(temp)
+        points = pickle.loads(self.client.recv(2048))
         return points
 
     def checkAnswers(self, positionX, positionY):

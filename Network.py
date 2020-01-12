@@ -1,6 +1,7 @@
 import socket as sc
 import sys
 import logging as log
+import pickle
 
 
 class Network:
@@ -35,3 +36,9 @@ class Network:
 
     def end(self):
         client.close()
+
+    def send_pickle(self,data):
+        self.client.send(pickle.dumps(data))
+
+    def recv_pickle(self):
+        return pickle.loads(self.client.recv(2048))

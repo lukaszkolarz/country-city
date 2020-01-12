@@ -4,13 +4,12 @@ from _thread import *
 import random
 import logging as log
 from G_server import G_server
+import pickle
 
-# import pickle
-
-"""def send_pickle(data):
+def send_pickle(data):
     clientsocket.send(pickle.dumps(data))
 def recv_pickle():
-    return pickle.loads(clientsocket.recv(2048)) """
+    return pickle.loads(clientsocket.recv(2048))
 
 
 def send(data):  # sending to server
@@ -30,11 +29,7 @@ def generator():
     return letter
 
 
-# def send(msg):
-#   msg = f"{len(msg):<{HEADSIZE}}" + msg
-#  clientsocket.send(bytes(msg,"utf-8"))
-
-
+global current_player
 log.basicConfig(filename="server.log", level=log.DEBUG)
 k = G_server()
 server = "192.168.1.45"
@@ -56,11 +51,10 @@ def threaded_client(clientsocket, player):
             v = generator()
             send(v)  # wysyłamy liczbę
             print(v)
-            # vector = pickle.loads((clientsocket.recv(1024)))
-            for i in range(6):
-                vector = []
-                vector[i] = recv()
-                k.append(vector)  # tutaj go łączy w wektor wektorów
+            vector = []
+            vector = recv_pickle()
+            k.append(vector)
+                  # tutaj go łączy w wektor wektorów
 
             while True:
                 if k.size() == current_players - 1:  # spradza czy wszyscy wysłali
@@ -68,27 +62,25 @@ def threaded_client(clientsocket, player):
 
             send(current_players)
             if player == 0:
-                # send_pickle(k)
-                for i in range(current_players):
+                send_pickle(k)
+                """for i in range(current_players):
                     for j in range(6):
                         clientsocket.send(k[i][j])  # Nie wiem czy to działą , pcozekać na łukasza"""
             else:
-                clientsocket.send("Sprawdzanie wyników")
+                send("Sprawdzanie wyników")
 
             if player == 0:
-                # vector1 = recv_pickle()
-                # k.fill(vector1, current_players)
-                for i in range(current_players):
-                    for j in range(6):
-                        m = clientsocket.recv()
-                        k[i][j] = m
+                vector1 =[]
+                vector1 = recv_pickle()
+                k.fill(vector1)
 
             k.check1()
             k.check2()
-            k.create_score()
-            for i in range(current_players):
+            vector2 = k.create_score()
+            """for i in range(current_players):
                 for j in range(2):
-                    clientsocket.send(k[i][j])
+                    clientsocket.send(k[i][j])"""
+            send_pickle(vector2)
 
             k.clear()
         except:

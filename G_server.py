@@ -47,7 +47,9 @@ class G_server:
 
     def clear(self):
         self.vector = []
-    def fill(self,vec,player):
-        for j in range(player):
+    def fill(self,vec):
+        a = numpy.shape(self.vector)
+        a = a[0]
+        for j in range(a):
             for i in range(6):
-                self.vector[player][i] = vec[player][i]
+                self.vector[a][i] = vec[a][i]

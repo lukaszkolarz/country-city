@@ -37,9 +37,9 @@ while msg != "no":
     session.sendVector(session.vector)
 
     if session.ID == 0:
-        session.recvCheck()
+        vector = session.recvCheck()
         #checking procedure
-        session.sendCheckBack()
+        session.sendCheckBack(vector)
     else:
         session.recvNotCheck()
 
