@@ -4,7 +4,7 @@ import Game as gm
 
 
 print("Hello, insert server IP:")
-ip = "192.168.1.80"       #input()
+ip = "192.168.1.45"       #input()
 
 session = gm.Game(ip)
 
@@ -13,6 +13,7 @@ nick = input()
 
 session.setNick(nick)
 session.send(nick)
+print(session.recv())
 
 msg = ''
 
