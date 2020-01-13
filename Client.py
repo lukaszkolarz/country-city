@@ -4,7 +4,7 @@ import Game as gm
 
 
 print("Hello, insert server IP:")
-ip = "192.168.1.45"       #input()
+ip = "192.168.1.122"       #input()
 
 session = gm.Game(ip)
 

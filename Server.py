@@ -6,8 +6,11 @@ import logging as log
 from G_server import G_server
 import pickle
 
+
 def send_pickle(data):
     clientsocket.send(pickle.dumps(data))
+
+
 def recv_pickle():
     return pickle.loads(clientsocket.recv(2048))
 
@@ -32,9 +35,10 @@ def generator():
 global current_player
 log.basicConfig(filename="server.log", level=log.DEBUG)
 k = G_server()
-server = "192.168.1.45"
+server = "192.168.1.122"
 port = 8000
 s = sc.socket(sc.AF_INET, sc.SOCK_STREAM, sc.IPPROTO_SCTP)
+log.info(f"Socket has been created {server}:{port}")
 s.bind((server, port))
 s.listen(5)
 print("Waiting for a connection")
@@ -44,17 +48,16 @@ def threaded_client(clientsocket, player):
     send(str(player))  # send(str(player))
     login = recv()  # tutaj powinien odebrac login
     print(login)
-    send("Zacznijmy zabawę")     # wysłanie wiadomosci konczącej sesje powitalna
+    send("Zacznijmy zabawę")  # wysłanie wiadomosci konczącej sesje powitalna
 
     while True:
         try:
             v = generator()
-            send(v)  # wysyłamy liczbę
+            send(v)                 # wysyłamy liczbę
             print(v)
-            vector = []
+            #vector = []
             vector = recv_pickle()
-            k.append(vector)
-                  # tutaj go łączy w wektor wektorów
+            k.append(vector)        # tutaj go łączy w wektor wektorów
 
             while True:
                 if k.size() == current_players - 1:  # spradza czy wszyscy wysłali
@@ -70,7 +73,7 @@ def threaded_client(clientsocket, player):
                 send("Sprawdzanie wyników")
 
             if player == 0:
-                vector1 =[]
+                #vector1 = []
                 vector1 = recv_pickle()
                 k.fill(vector1)
 
@@ -87,14 +90,15 @@ def threaded_client(clientsocket, player):
 
             break
     print("Lost connection ")
+    log.error(f"Connection with {address} has been lost!")
     clientsocket.close()
 
 
 current_players = 0
 while True:
     clientsocket, address = s.accept()
+    log.info(f"New connection from {address}")
     print("Connection from :", address)
-    log.info("Connected from" + str(address))
     send("Connected with server")
     start_new_thread(threaded_client, (clientsocket, current_players))
     current_players += 1

@@ -16,3 +16,5 @@ client.log,a/d/ad5465e346cfb3a2a546d723d37782461bdbc27a
 server.log,7/d/7dc887313b0471913770314ec8b45b6864b99bea
 ;
 G_server.py,2/9/29ff9a6a71589e01a280d24189e327695cbea08a
+^
+..idea/inspectionProfiles/profiles_settings.xml,1/e/1e9075f5bf079c01ef2c910709e91a497d262080
