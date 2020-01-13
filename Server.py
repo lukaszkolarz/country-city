@@ -55,12 +55,11 @@ def threaded_client(clientsocket, player):
             v = generator()
             send(v)                 # wysyłamy liczbę
             print(v)
-            #vector = []
             vector = recv_pickle()
             k.append(vector)        # tutaj go łączy w wektor wektorów
 
             while True:
-                if k.size() == current_players - 1:  # spradza czy wszyscy wysłali
+                if (k.size()[1]) == current_players:  # spradza czy wszyscy wysłali
                     break
 
             send(current_players)
@@ -73,7 +72,6 @@ def threaded_client(clientsocket, player):
                 send("Sprawdzanie wyników")
 
             if player == 0:
-                #vector1 = []
                 vector1 = recv_pickle()
                 k.fill(vector1)
 

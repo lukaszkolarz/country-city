@@ -36,7 +36,7 @@ while msg != "no":
     session.buildVector(country, city, animal, plant, item)
     session.sendVector(session.vector)
 
-    if session.ID == 0:
+    if int(session.ID) == 0:
         vector = session.recvCheck()
         #checking procedure
         session.sendCheckBack(vector)

@@ -35,9 +35,10 @@ class Network:
         return msg
 
     def end(self):
-        client.close()
+        self.client.close()
+        log.info("Connection closed")
 
-    def send_pickle(self,data):
+    def send_pickle(self, data):
         self.client.send(pickle.dumps(data))
 
     def recv_pickle(self):

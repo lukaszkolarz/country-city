@@ -1,11 +1,12 @@
 import random
 import numpy
 
+
 class G_server:
     def __init__(self):
         self.vector = []
 
-    def append(self,vector1):
+    def append(self, vector1):
         self.vector.append(vector1)
 
     def size(self):
@@ -17,17 +18,18 @@ class G_server:
         for i in range(a[0]):
             self.vector[i][6] = 0
         for i in range(a[0]):
-            for j in range(1,6):
-                if self.vector[i][j] ==0:              ##sprawdzanie zer
-                    self.vector[i][6] =+10
+            for j in range(1, 6):
+                if self.vector[i][j] == 0:  # sprawdzanie zer
+                    self.vector[i][6] = +10
+
     def check2(self):
         a = numpy.shape(self.vector)
-        for i in range(1,6):
+        for i in range(1, 6):
             for j in range(a[0]):
-                for n in range (a[0]):                  #sprawdzanie powtórzen
-                    if j!=n:
+                for n in range(a[0]):  # sprawdzanie powtórzen
+                    if j != n:
                         if self.vector[j][i] == self.vector[j][n]:
-                            self.vector[j][6] -=5
+                            self.vector[j][6] -= 5
 
     def create_score(self):
         score = []
@@ -38,7 +40,7 @@ class G_server:
             score[i][1] = self.vector[i][6]
         return score
 
-    def vecscore(self,player):
+    def vecscore(self, player):
         vector = []
         for i in range(player):
             vector[i][0] = self.vector[i][0]
@@ -47,7 +49,8 @@ class G_server:
 
     def clear(self):
         self.vector = []
-    def fill(self,vec):
+
+    def fill(self, vec):
         a = numpy.shape(self.vector)
         a = a[0]
         for j in range(a):
