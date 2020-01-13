@@ -35,7 +35,7 @@ class Game(net.Network):
         self.send_pickle(vector)
 
     def recvNotCheck(self):
-        self.playersCount = int(self.recv())
+        #self.playersCount = int(self.recv())
         return self.recv()
 
     def recvPoints(self):

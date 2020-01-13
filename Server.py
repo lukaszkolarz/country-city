@@ -59,10 +59,10 @@ def threaded_client(clientsocket, player):
             k.append(vector)        # tutaj go łączy w wektor wektorów
 
             while True:
-                if (k.size()[1]) == current_players:  # spradza czy wszyscy wysłali
+                if (k.size()[0]) == current_players:  # spradza czy wszyscy wysłali
                     break
 
-            send(current_players)
+            #send(current_players)
             if player == 0:
                 send_pickle(k)
                 """for i in range(current_players):

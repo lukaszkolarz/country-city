@@ -41,7 +41,7 @@ while msg != "no":
         #checking procedure
         session.sendCheckBack(vector)
     else:
-        session.recvNotCheck()
+        print(session.recvNotCheck())
 
     points = session.recvPoints()
     #display points
