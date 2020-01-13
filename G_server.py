@@ -55,4 +55,4 @@ class G_server:
         a = a[0]
         for j in range(a):
             for i in range(6):
-                self.vector[a][i] = vec[a][i]
+                self.vector[j][i] = vec[j][i]
