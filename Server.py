@@ -4,15 +4,13 @@ from _thread import *
 import random
 import logging as log
 from G_server import G_server
-import pickle
 
+# import pickle
 
-def send_pickle(data):
+"""def send_pickle(data):
     clientsocket.send(pickle.dumps(data))
-
-
 def recv_pickle():
-    return pickle.loads(clientsocket.recv(2048))
+    return pickle.loads(clientsocket.recv(2048)) """
 
 
 def send(data):  # sending to server
@@ -32,13 +30,16 @@ def generator():
     return letter
 
 
-global current_player
+# def send(msg):
+#   msg = f"{len(msg):<{HEADSIZE}}" + msg
+#  clientsocket.send(bytes(msg,"utf-8"))
+
+
 log.basicConfig(filename="server.log", level=log.DEBUG)
 k = G_server()
-server = "192.168.1.122"
+server = "192.168.1.45"
 port = 8000
-s = sc.socket(sc.AF_INET, sc.SOCK_STREAM, sc.IPPROTO_SCTP)
-log.info(f"Socket has been created {server}:{port}")
+s = sc.socket(sc.AF_INET, sc.SOCK_SEQPACKET, sc.IPPROTO_SCTP)
 s.bind((server, port))
 s.listen(5)
 print("Waiting for a connection")
@@ -48,55 +49,60 @@ def threaded_client(clientsocket, player):
     send(str(player))  # send(str(player))
     login = recv()  # tutaj powinien odebrac login
     print(login)
-    send("Zacznijmy zabawę")  # wysłanie wiadomosci konczącej sesje powitalna
+    send("Zacznijmy zabawę")     # wysłanie wiadomosci konczącej sesje powitalna
 
     while True:
         try:
             v = generator()
-            send(v)                 # wysyłamy liczbę
+            send(v)  # wysyłamy liczbę
             print(v)
-            vector = recv_pickle()
-            k.append(vector)        # tutaj go łączy w wektor wektorów
+            # vector = pickle.loads((clientsocket.recv(1024)))
+            for i in range(6):
+                vector = []
+                vector[i] = recv()
+                k.append(vector)  # tutaj go łączy w wektor wektorów
 
             while True:
-                if (k.size()[0]) == current_players:  # spradza czy wszyscy wysłali
+                if k.size() == current_players - 1:  # spradza czy wszyscy wysłali
                     break
 
-            #send(current_players)
+            send(current_players)
             if player == 0:
-                send_pickle(k)
-                """for i in range(current_players):
+                # send_pickle(k)
+                for i in range(current_players):
                     for j in range(6):
                         clientsocket.send(k[i][j])  # Nie wiem czy to działą , pcozekać na łukasza"""
             else:
-                send("Sprawdzanie wyników")
+                clientsocket.send("Sprawdzanie wyników")
 
             if player == 0:
-                vector1 = recv_pickle()
-                k.fill(vector1)
+                # vector1 = recv_pickle()
+                # k.fill(vector1, current_players)
+                for i in range(current_players):
+                    for j in range(6):
+                        m = clientsocket.recv()
+                        k[i][j] = m
 
             k.check1()
             k.check2()
-            vector2 = k.create_score()
-            """for i in range(current_players):
+            k.create_score()
+            for i in range(current_players):
                 for j in range(2):
-                    clientsocket.send(k[i][j])"""
-            send_pickle(vector2)
+                    clientsocket.send(k[i][j])
 
             k.clear()
         except:
 
             break
     print("Lost connection ")
-    log.error(f"Connection with {address} has been lost!")
     clientsocket.close()
 
 
 current_players = 0
 while True:
     clientsocket, address = s.accept()
-    log.info(f"New connection from {address}")
     print("Connection from :", address)
+    log.info("Connected from" + str(address))
     send("Connected with server")
     start_new_thread(threaded_client, (clientsocket, current_players))
     current_players += 1
