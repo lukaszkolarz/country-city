@@ -1,6 +1,7 @@
 import socket as sc
 import Network as net
 import Game as gm
+import logging as log
 
 
 print("Hello, insert server IP:")
