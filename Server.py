@@ -25,13 +25,40 @@ def generator():
     return letter
 def check1(vector):
     a = numpy.shape(vector)
-    for i in range(a[0]):
-        vector[i][6] = 0
-    for i in range(a[0]):
+    a= int(a[0])
+    print(a)
+    vector3 = []
+    vector2 = []
+    for i in range(a):
+        vector2.append(vector[i][0])
+        vector2.append(vector[i][1])
+        vector2.append(vector[i][2])
+        vector2.append(vector[i][3])
+        vector2.append(vector[i][4])
+        vector2.append(vector[i][5])
+        vector2.append(int(0))
+        vector3.append(vector2)
+        vector2 = []
+    return  vector3
+def check3(vector):
+    a = numpy.shape(vector)
+    a = a[0]
+    for i in range(a):
         for j in range(1,6):
-            if vector[i][j] != 0:
-                vector[i][6] =+10
+            if vector[i][j] != "0":
+                vector[i][6] +=10
     return vector
+def create_score(vector):
+    score = []
+    score1 = []
+    a = numpy.shape(vector)
+    a = a[0]
+    for i in range(a):
+        score1.append(vector[i][0])
+        score1.append(vector[i][6])
+        score.append(score1)
+        score1 = []
+    return score
 def check2(vector):
     a = numpy.shape(vector)
     a = a[0]
@@ -39,17 +66,22 @@ def check2(vector):
         for j in range(a):
             for n in range(a):  # sprawdzanie powtórzen
                 if j != n:
-                    if vector[j][i] == vector[j][n]:
+                    if vector[j][i] == vector[n][i] and vector[j][i] != "0":
                         vector[j][6] -= 5
 
     return vector
+
+
 def create_score(vector):
     score = []
+    score1 = []
     a = numpy.shape(vector)
     a = a[0]
     for i in range(a):
-        score[i][0] = vector[i][0]
-        score[i][1] = vector[i][6]
+        score1.append(vector[i][0])
+        score1.append(vector[i][6])
+        score.append(score1)
+        score1 = []
     return score
 
 global Vector
@@ -96,20 +128,21 @@ def threaded_client(clientsocket, player):
                 send("Sprawdzanie wyników")
                 log.info("Information sent")
 
-            if player == 0:
-                vector1 =[]
-                vector1 = recv_pickle()
-                log.info("Answers was chcecked and received from player number 0")
+            vector1 =[]
+            vector1 = recv_pickle()
+            log.info("Answers was chcecked and received from player number 0")
+            print(vector1)
 
-            Vector = check1(vector1)
-            Vector = check2(vector1)
+            a = check1(vector1)
+            print(a)
+            b = check3(a)
+            print(b)
+            c =check2(b)
+            print(c)
 
-
-            Vector = create_score(Vector)
-            """for i in range(current_players):
-                for j in range(2):
-                    clientsocket.send(k[i][j])"""
-            send_pickle(Vector)
+            d = create_score(c)
+            print(d)
+            send_pickle(d)
             log.info("Score was sent to clients")
 
             Vector = []
