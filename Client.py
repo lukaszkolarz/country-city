@@ -51,7 +51,7 @@ while msg != "no":
     points = session.recvPoints()
     log.info("Points received")
     #display points
-    print("Your score" + session.findMyPoint() + "\n")
+    print("Your score" + session.findMyPoint(points) + "\n")
     log.info("Player's points received")
     print("Would u like to play again? / \"no\" for not")
     msg = input()

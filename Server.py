@@ -3,29 +3,41 @@ import threading
 from _thread import *
 import random
 import logging as log
-#from G_server import G_server
+# from G_server import G_server
 import pickle
 import numpy
+
+
 def send_pickle(data):
     clientsocket.send(pickle.dumps(data))
+
+
 def recv_pickle():
     vector = pickle.loads(clientsocket.recv(2048))
     log.info(" answers sent")
     return vector
+
+
 def send(data):  # sending to server
     clientsocket.send(bytes(data, "utf-8"))
+
+
 def recv():  # receiving from server
     msg = clientsocket.recv(2048).decode("utf-8")
     return msg
+
+
 def generator():
     marks = "abcdefghijklmnouprstuvwyz"
     k = len(marks)
     generate = random.randint(0, k)
     letter = marks[generate]
     return letter
+
+
 def check1(vector):
     a = numpy.shape(vector)
-    a= int(a[0])
+    a = int(a[0])
     print(a)
     vector3 = []
     vector2 = []
@@ -39,15 +51,19 @@ def check1(vector):
         vector2.append(int(0))
         vector3.append(vector2)
         vector2 = []
-    return  vector3
+    return vector3
+
+
 def check3(vector):
     a = numpy.shape(vector)
     a = a[0]
     for i in range(a):
-        for j in range(1,6):
+        for j in range(1, 6):
             if vector[i][j] != "0":
-                vector[i][6] +=10
+                vector[i][6] += 10
     return vector
+
+
 def create_score(vector):
     score = []
     score1 = []
@@ -59,6 +75,8 @@ def create_score(vector):
         score.append(score1)
         score1 = []
     return score
+
+
 def check2(vector):
     a = numpy.shape(vector)
     a = a[0]
@@ -84,10 +102,10 @@ def create_score(vector):
         score1 = []
     return score
 
+
 global Vector
 global current_player
 log.basicConfig(filename="server.log", level=log.DEBUG)
-#k = G_server()
 server = "172.19.127.251"
 port = 8000
 s = sc.socket(sc.AF_INET, sc.SOCK_STREAM, sc.IPPROTO_SCTP)
@@ -97,28 +115,27 @@ print("Waiting for a connection")
 
 
 def threaded_client(clientsocket, player):
-    #global Vector
+    # global Vector
     send(str(player))  # send(str(player))
     login = recv()  # tutaj powinien odebrac login
     print(login)
-    send("Zacznijmy zabawę")     # wysłanie wiadomosci konczącej sesje powitalna
+    send("Zacznijmy zabawę")  # wysłanie wiadomosci konczącej sesje powitalna
 
     while True:
         try:
             v = generator()
             send(v)  # wysyłamy liczbę
             print(v)
-            vector = []
             vector = recv_pickle()
             log.info(" answers received")
             print(vector)
             Vector = []
             Vector.append(vector)
-            print(Vector)      # tutaj go łączy w wektor wektorów
+            print(Vector)  # tutaj go łączy w wektor wektorów
             a = numpy.shape(Vector)
 
             while True:
-                if a[0] == current_players  :  # spradza czy wszyscy wysłali
+                if a[0] == current_players:  # spradza czy wszyscy wysłali
                     break
 
             if player == 0:
@@ -128,7 +145,7 @@ def threaded_client(clientsocket, player):
                 send("Sprawdzanie wyników")
                 log.info("Information sent")
 
-            vector1 =[]
+            vector1 = []
             vector1 = recv_pickle()
             log.info("Answers was chcecked and received from player number 0")
             print(vector1)
@@ -137,7 +154,7 @@ def threaded_client(clientsocket, player):
             print(a)
             b = check3(a)
             print(b)
-            c =check2(b)
+            c = check2(b)
             print(c)
 
             d = create_score(c)

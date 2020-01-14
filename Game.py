@@ -47,8 +47,8 @@ class Game(net.Network):
 
     def findMyPoint(self, points):
         for i in points:
-            if points[i][0] == self.nick:
-                self.score += points[i][1]
+            if i[0] == self.nick:
+                self.score += i[1]
                 return str(self.score)
         log.info("No score available!")
         return "Error"
