@@ -50,7 +50,7 @@ class Gui(ttk.Frame):
         connection = ttk.Label(self, text="Connected to the server :)")
         connection.place(x=0, y=50)
 
-        id = ttk.Label(self, text=("Your ID: " + self.ID))
+        id = ttk.Label(self, text=("Your ID: " + session.ID))
         id.place(x=350, y=0)
 
         quest2 = ttk.Label(self, text="Insert your nick")
@@ -65,7 +65,8 @@ class Gui(ttk.Frame):
 
     def setNick(self):
         self.nick = e2.get()
-        session.setnick(self.nick)
+        session.setNick(self.nick)
+        session.send(self.nick)
         print(session.recv())
         self.game()
 
@@ -118,7 +119,7 @@ class Gui(ttk.Frame):
         self.plant = plant.get()
         self.item = item.get()
         session.buildVector(self.country, self.city, self.animal, self.plant, self.item)
-        session.sendVector(self.vector)
+        session.sendVector(session.vector)
         log.info("Answers sent")
         self.checkAns()
 
@@ -128,7 +129,7 @@ class Gui(ttk.Frame):
         log.info("Received to check")
 
         if int(session.ID) == 0:
-            vector = self.recvCheck()
+            vector = session.recvCheck()
             log.info("Received to check")
             self.buildForCheck()
         else:
@@ -168,13 +169,12 @@ class Gui(ttk.Frame):
         selfScore = ttk.Label(self, text="Your score: " + session.findMyPoint(points), font="Arial 10 bold")
         selfScore.place(x=0, y=400)
         log.info("Player's points received")
-        question = ttk.Label(self, text="Would you like to play again?" + session.findMyPoint(points), font="Arial 10")
+        question = ttk.Label(self, text="Would you like to play again?", font="Arial 10")
         question.place(x=0, y=430)
-        a1 = Button(self, text='Again', command=self.exit)
+        a1 = Button(self, text='Again', command=self.game)
         a1.place(x=200, y=470)
-        a2 = Button(self, text='Exit', command=self.game)
+        a2 = Button(self, text='Exit', command=self.exit)
         a2.place(x=400, y=470)
-
 
     def destroy(self):
         for widget in self.winfo_children():
