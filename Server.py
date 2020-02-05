@@ -11,7 +11,7 @@ def ID_generate ():
         var.Player_ID.pop(ID_INDEX)
         return ID
     else:
-        k = len(var.Player_ID)
+        k = len(var.Player_ID) - 1
         generate = random.randint(0,k)
         ID = var.Player_ID[generate]
         ID_INDEX = var.Player_ID.index(ID)

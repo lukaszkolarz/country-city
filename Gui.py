@@ -133,7 +133,7 @@ class Gui(ttk.Frame):
             log.info("Received to check")
             self.buildForCheck()
         else:
-            label = self.recvNotCheck()
+            label = session.recvNotCheck()
             wait = ttk.Label(self, text=label, font="Arial 15 bold")
             wait.place(relx=0.5, rely=0.5, anchor=CENTER)
             self.score()
