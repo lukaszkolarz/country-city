@@ -1,62 +1,31 @@
-import socket as sc
-import threading
-from _thread import *
+import var
+import Game_For_Sever as gm
 import random
-def generator():
-    marks = "abcdefghijklmnouprstuvwyz"
-    k = len(marks)
-    generate = random.randint(0, k)
-    letter = marks[generate]
-    return letter
-server = "172.19.127.251"
-port = 8107
-s = sc.socket(sc.AF_INET, sc.SOCK_STREAM)
-s.bind((server,port))
-s.listen(5)
-print("Waiting for a connection")
+from Net_For_S import Server
 
+def ID_generate ():
 
-def threaded_client(clientsocket, player):
+    if 0 in var.Player_ID:
+        ID = 0
+        ID_INDEX = var.Player_ID.index(0)
+        var.Player_ID.pop(ID_INDEX)
+        return ID
+    else:
+        k = len(var.Player_ID)
+        generate = random.randint(0,k)
+        ID = var.Player_ID[generate]
+        ID_INDEX = var.Player_ID.index(ID)
+        var.Player_ID.pop(ID_INDEX)
+        return ID
 
-    clientsocket.send(str.encode("    Connected Jaki masz login"))
-    login = clientsocket.recv(1024) #tutaj powinien odebrac login
-    reply = login.decode("utf-8")
-    print(reply)
-    clientsocket.send(str.encode("Zacznijmy zabawe")) # wysłanie wiadomosci konczącej sesje powitalna
-    while True:
-        try:
-            #print(clientsocket.recv(1024).decode("utf-8"))
-            clientsocket.send(str.encode( generator()))    #wysyłamy liczbę
-            print(clientsocket.recv(1024).decode("utf-8"))
+var.Player_ID = [0,1,2,3,4]
+var.current_players = 0
 
-            vector = []
-            for i in range(5):
-                vector[i]=clientsocket.recv(1024).decode("utf-8")
-                print(clientsocket.send(str.encode(("wektor odebrany"))))
-            print(vector)
-
-
-
-            if not login:
-                break
-            else:
-                print("Received:", reply)
-                print("Sending",reply)
-
-            clientsocket.sendall(str.encode(reply))
-        except:
-            break
-    print("Lost connection ")
-    clientsocket.close()
-
-current_players = 0
+serwer = Server()
+serwer.socket_open()
 while True:
-    clientsocket , address = s.accept()
-    print("Connection from :",address)
-    clientsocket.send(bytes("Connected with server","utf-8"))
-    start_new_thread(threaded_client,(clientsocket,current_players))
-    current_players +=1
-
-
-
-
+    client , adres = serwer.connection()
+    var.current_players +=1
+    ID = ID_generate()
+    client = gm.ThreadServer(ID,serwer,client,adres)
+    client.start()
