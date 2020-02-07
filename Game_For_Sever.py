@@ -1,39 +1,41 @@
 import threading
 import logging as log
-from Net_For_S import Server
+import pickle
 import numpy
 import random
 import var
 
 
+log.basicConfig(filename="server.log", level=log.DEBUG)
 class ThreadServer(threading.Thread):
 
-    def __init__(self,number,ser,clients,address):
+    def __init__(self,number,clients,address):
         threading.Thread. __init__(self)
-        self.ser = ser
-        self.clients1 = clients
+        self.clientsocket = clients
         self.address = address
         self.number = number
 
     def run(self):
-        self.ser.send("Connected with server")
-        self.ser.send(str(self.number))  # send(str(player))
+        self.send("Connected with server")
+        self.send(str(self.number))  # send(str(player))
         print(str(self.number))
-        login = self.ser.recv()  # tutaj powinien odebrac login
+        login = self.recv()  # tutaj powinien odebrac login
         print(login)
-        self.ser.send("Zacznijmy zabawę")  # wysłanie wiaadomości
+        self.send("Zacznijmy zabawę")  # wysłanie wiaadomości
 
         while True:
             try:
                 var.main_vector = []
+                var.wait = 0
 
                 if self.number == 0:
 
                     var.Letter = self.generator()
 
-                self.ser.send(var.Letter)
+                var.wait =0
+                self.send(var.Letter)
                 print(var.Letter)
-                vector = self.ser.recv_pickle()
+                vector = self.recv_pickle()
                 print(vector)
                 var.main_vector.append(vector)
                 a = numpy.shape(var.main_vector)
@@ -42,8 +44,8 @@ class ThreadServer(threading.Thread):
                         break
                 if self.number == 0:
                     print(var.main_vector)
-                    self.ser.send_pickle(var.main_vector)
-                    var.main_vector = self.ser.recv_pickle()
+                    self.send_pickle(var.main_vector)
+                    var.main_vector = self.recv_pickle()
                     var.wait = 1
                 else:
                     while True:
@@ -52,11 +54,11 @@ class ThreadServer(threading.Thread):
                 var.wait = 0
                 temp = self.check2(self.check3(self.check1(var.main_vector)))
                 temp1 = self.create_score(temp)
-                self.ser.send_pickle(temp1)
+                self.send_pickle(temp1)
                 log.info("Score was sent to clients")
             except:
                 print("Lost connection ")
-                self.clients1.close()
+                self.clientsocket.close()
                 var.current_players -= 1
                 self.ID_attend(self.number)
                 break
@@ -123,6 +125,31 @@ class ThreadServer(threading.Thread):
         var.Player_ID.append(number)
         return var.Player_ID
 
+    def connection(self):
+        clients1, address = self.s.accept()
+        self.clientsocket = clients1
+        self.address = address
+        print("Connection from :", self.address)
+        log.info("Connected from" + str(self.address))
+        return self.clientsocket, self.address
+
+    def send_pickle(self, data):
+        self.clientsocket.send(pickle.dumps(data))
+        log.info("Information sent[pickle]")
+
+    def recv_pickle(self):
+        vector = pickle.loads(self.clientsocket.recv(2048))
+        log.info(" Information received[pickle]")
+        return vector
+
+    def send(self, data):  # sending to server
+        self.clientsocket.send(bytes(data, "utf-8"))
+        log.info(" Information sent")
+
+    def recv(self):  # receiving from server
+        msg = self.clientsocket.recv(2048).decode("utf-8")
+        log.info(" Information received")
+        return msg
 
 
 

@@ -1,7 +1,10 @@
 import var
 import Game_For_Sever as gm
 import random
-from Net_For_S import Server
+import socket as sc
+import logging as log
+
+log.basicConfig(filename="server.log", level=log.DEBUG)
 
 def ID_generate ():
 
@@ -21,11 +24,16 @@ def ID_generate ():
 var.Player_ID = [0,1,2,3,4]
 var.current_players = 0
 
-serwer = Server()
-serwer.socket_open()
+server = "localhost"
+port = 8000
+s = sc.socket(sc.AF_INET, sc.SOCK_STREAM, sc.IPPROTO_SCTP)
+s.bind((server,port))
+s.listen(5)
 while True:
-    client , adres = serwer.connection()
+    client , address = s.accept()
+    print("Connection from :", address)
+    log.info("Connected from" + str(address))
     var.current_players +=1
     ID = ID_generate()
-    client = gm.ThreadServer(ID,serwer,client,adres)
+    client = gm.ThreadServer(ID,client,address)
     client.start()

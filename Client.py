@@ -5,7 +5,7 @@ import logging as log
 
 
 print("Hello, insert server IP:")
-ip = "192.168.1.122"       #input()
+ip = "localhost"       #input()
 
 session = gm.Game(ip)
 
