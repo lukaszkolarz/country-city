@@ -24,9 +24,12 @@ def ID_generate ():
 var.Player_ID = [0,1,2,3,4]
 var.current_players = 0
 
-server = "localhost"
+host_name = sc.gethostname()
+server = sc.gethostbyname(host_name)
+print(server)
 port = 8000
 s = sc.socket(sc.AF_INET, sc.SOCK_STREAM, sc.IPPROTO_SCTP)
+s.setsockopt(sc.SOL_SOCKET, sc.SO_REUSEADDR, 1)
 s.bind((server,port))
 s.listen(5)
 while True:

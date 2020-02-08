@@ -5,7 +5,7 @@ import logging as log
 
 
 print("Hello, insert server IP:")
-ip = "localhost"       #input()
+ip = input()
 
 session = gm.Game(ip)
 
@@ -36,7 +36,7 @@ while msg != "no":
 
     session.buildVector(country, city, animal, plant, item)
     session.sendVector(session.vector)
-    log.info("Answers sent")
+    log.info(session.ID + "'s answers sent")
 
     if int(session.ID) == 0:
         vector = session.recvCheck()
@@ -45,14 +45,18 @@ while msg != "no":
         session.sendCheckBack(vector)
         log.info("Sent after checking")
     else:
-        print(session.recvNotCheck())
+        print(session.recv())
         log.info("Waiting for points")
 
-    points = session.recvPoints()
-    log.info("Points received")
-    #display points
-    print("Your score" + session.findMyPoint(points) + "\n")
-    log.info("Player's points received")
+    if session.recv() == 'DONE':
+        points = session.recvPoints()
+        log.info("Points received")
+        #display points
+        print("Your score: " + session.findMyPoint(points) + "\n")
+        log.info("Player's points received")
+    else:
+        print('Cannot receive scores!')
+        log.info('Player ' + session.ID + ' cannot receive scores')
     print("Would u like to play again? / \"no\" for not")
     msg = input()
 

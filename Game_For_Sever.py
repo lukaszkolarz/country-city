@@ -4,6 +4,7 @@ import pickle
 import numpy
 import random
 import var
+import time
 
 
 log.basicConfig(filename="server.log", level=log.DEBUG)
@@ -26,34 +27,32 @@ class ThreadServer(threading.Thread):
         while True:
             try:
                 var.main_vector = []
-                var.wait = 0
 
                 if self.number == 0:
 
                     var.Letter = self.generator()
 
-                var.wait =0
                 self.send(var.Letter)
                 print(var.Letter)
                 vector = self.recv_pickle()
                 print(vector)
                 var.main_vector.append(vector)
-                a = numpy.shape(var.main_vector)
                 while True:
+                    a = numpy.shape(var.main_vector)
                     if a[0] == var.current_players:  # spradza czy wszyscy wysłali
                         break
+
                 if self.number == 0:
                     print(var.main_vector)
                     self.send_pickle(var.main_vector)
                     var.main_vector = self.recv_pickle()
-                    var.wait = 1
                 else:
-                    while True:
-                        if var.wait == 1:
-                            break
-                var.wait = 0
+                    send("Sprawdzanie wyników")
+                    log.info("Information sent")
+
                 temp = self.check2(self.check3(self.check1(var.main_vector)))
                 temp1 = self.create_score(temp)
+                self.send("DONE")
                 self.send_pickle(temp1)
                 log.info("Score was sent to clients")
             except:
@@ -64,7 +63,7 @@ class ThreadServer(threading.Thread):
                 break
     def generator(self):
         marks = "abcdefghijklmnouprstuvwyz"
-        k = len(marks)
+        k = len(marks) - 1
         generate = random.randint(0, k)
         letter = marks[generate]
         return letter
@@ -72,7 +71,6 @@ class ThreadServer(threading.Thread):
     def check1(self,vector):
         a = numpy.shape(vector)
         a = int(a[0])
-        print(a)
         vector3 = []
         vector2 = []
         for i in range(a):
@@ -130,25 +128,25 @@ class ThreadServer(threading.Thread):
         self.clientsocket = clients1
         self.address = address
         print("Connection from :", self.address)
-        log.info("Connected from" + str(self.address))
+        log.info("Connected with" + str(self.address))
         return self.clientsocket, self.address
 
     def send_pickle(self, data):
         self.clientsocket.send(pickle.dumps(data))
-        log.info("Information sent[pickle]")
+        log.info("Client " + str(self.number) + " information sent[pickle]")
 
     def recv_pickle(self):
         vector = pickle.loads(self.clientsocket.recv(2048))
-        log.info(" Information received[pickle]")
+        log.info("Client " + str(self.number) + " information received[pickle]")
         return vector
 
-    def send(self, data):  # sending to server
+    def send(self, data):
         self.clientsocket.send(bytes(data, "utf-8"))
-        log.info(" Information sent")
+        log.info("Client " + str(self.number) + " information sent")
 
-    def recv(self):  # receiving from server
+    def recv(self):
         msg = self.clientsocket.recv(2048).decode("utf-8")
-        log.info(" Information received")
+        log.info("Client " + str(self.number) + " information received")
         return msg
 
 
