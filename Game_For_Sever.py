@@ -4,9 +4,9 @@ import pickle
 import numpy
 import random
 import var
+from threading import Lock
 import time
-
-
+lock = Lock()
 log.basicConfig(filename="server.log", level=log.DEBUG)
 class ThreadServer(threading.Thread):
 
@@ -27,12 +27,20 @@ class ThreadServer(threading.Thread):
         while True:
             try:
                 var.main_vector = []
-
                 if self.number == 0:
-
+                    lock.acquire()
                     var.Letter = self.generator()
+                    lock.release()
+                    self.send(var.Letter)
+                    var.wait =1
+                else:
+                    while True:
 
-                self.send(var.Letter)
+                        if var.wait ==1:
+                            self.send(var.Letter)
+                            break
+                        else:
+                            time.sleep(1)
                 print(var.Letter)
                 vector = self.recv_pickle()
                 print(vector)
@@ -47,7 +55,7 @@ class ThreadServer(threading.Thread):
                     self.send_pickle(var.main_vector)
                     var.main_vector = self.recv_pickle()
                 else:
-                    send("Sprawdzanie wyników")
+                    self.send("Sprawdzanie wyników")
                     log.info("Information sent")
 
                 temp = self.check2(self.check3(self.check1(var.main_vector)))
@@ -142,7 +150,7 @@ class ThreadServer(threading.Thread):
 
     def send(self, data):
         self.clientsocket.send(bytes(data, "utf-8"))
-        log.info("Client " + str(self.number) + " information sent")
+        log.info("Client " + str(self.number) + " information sent"+ "     " +data)
 
     def recv(self):
         msg = self.clientsocket.recv(2048).decode("utf-8")
