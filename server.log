@@ -215,3 +215,84 @@ INFO:root:Client 0 information received[pickle]
 INFO:root:Client 0 information sent[pickle]
 INFO:root:Score was sent to clients
 INFO:root:Client 0 information sent     s
+INFO:root:Connected from('127.0.0.1', 41048)
+INFO:root:Client 0 information sent     Connected with server
+INFO:root:Client 0 information sent     0
+INFO:root:Connected from('127.0.0.1', 34020)
+INFO:root:Client 1 information sent     Connected with server
+INFO:root:Client 1 information sent     1
+INFO:root:Client 1 information received
+INFO:root:Client 1 information sent     Zacznijmy zabawę
+INFO:root:Client 0 information received
+INFO:root:Client 0 information sent     Zacznijmy zabawę
+INFO:root:Client 0 information sent     l
+INFO:root:Client 1 information sent     l
+INFO:root:Client 0 information received[pickle]
+INFO:root:Client 1 information received[pickle]
+INFO:root:Client 1 information sent     Sprawdzanie wyników
+INFO:root:Client 0 information sent[pickle]
+INFO:root:Client 0 information received[pickle]
+INFO:root:Client 0 information sent[pickle]
+INFO:root:Score was sent to clients
+INFO:root:Client 0 information sent     r
+INFO:root:Client 1 information sent[pickle]
+INFO:root:Score was sent to clients
+INFO:root:Client 1 information sent     r
+INFO:root:Connected from('127.0.0.1', 50264)
+INFO:root:Client 0 information sent     Connected with server
+INFO:root:Client 0 information sent     0
+INFO:root:Connected from('127.0.0.1', 42336)
+INFO:root:Client 4 information sent     Connected with server
+INFO:root:Client 4 information sent     4
+INFO:root:Client 0 information received
+INFO:root:Client 0 information sent     Zacznijmy zabawę
+INFO:root:Client 0 information sent     s
+INFO:root:Client 4 information received
+INFO:root:Client 4 information sent     Zacznijmy zabawę
+INFO:root:Client 4 information sent     s
+INFO:root:Client 4 information received[pickle]
+INFO:root:Client 0 information received[pickle]
+INFO:root:Client 0 information sent[pickle]
+INFO:root:Client 4 information sent     Sprawdzanie wyników
+INFO:root:Client 0 information received[pickle]
+INFO:root:Client 0 information sent[pickle]
+INFO:root:Score was sent to clients
+INFO:root:Client 0 information sent     e
+INFO:root:Client 4 information sent[pickle]
+INFO:root:Score was sent to clients
+INFO:root:Client 4 information sent     e
+INFO:root:Client 0 information received[pickle]
+INFO:root:Client 4 information received[pickle]
+INFO:root:Client 4 information sent     Sprawdzanie wyników
+INFO:root:Client 4 information sent[pickle]
+INFO:root:Score was sent to clients
+INFO:root:Client 4 information sent     e
+INFO:root:Connected from('127.0.0.1', 39548)
+INFO:root:Client 0 information sent     Connected with server
+INFO:root:Client 0 information sent     0
+INFO:root:Connected from('127.0.0.1', 48186)
+INFO:root:Client 2 information sent     Connected with server
+INFO:root:Client 2 information sent     2
+INFO:root:Client 2 information received
+INFO:root:Client 2 information sent     Zacznijmy zabawę
+INFO:root:Client 0 information received
+INFO:root:Client 0 information sent     Zacznijmy zabawę
+INFO:root:Client 0 information sent     f
+INFO:root:Client 2 information sent     f
+INFO:root:Client 0 information received[pickle]
+INFO:root:Client 2 information received[pickle]
+INFO:root:Client 0 information sent[pickle]
+INFO:root:Client 2 information sent     Sprawdzanie wyników
+INFO:root:Client 0 information received[pickle]
+INFO:root:Client 0 information sent[pickle]
+INFO:root:Score was sent to clients
+INFO:root:Client 0 information sent     r
+INFO:root:Client 2 information sent[pickle]
+INFO:root:Score was sent to clients
+INFO:root:Client 2 information sent     r
+INFO:root:Client 0 information received[pickle]
+INFO:root:Client 2 information received[pickle]
+INFO:root:Client 2 information sent     Sprawdzanie wyników
+INFO:root:Client 2 information sent[pickle]
+INFO:root:Score was sent to clients
+INFO:root:Client 2 information sent     r
