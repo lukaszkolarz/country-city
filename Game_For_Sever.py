@@ -27,12 +27,14 @@ class ThreadServer(threading.Thread):
         while True:
             try:
                 var.main_vector = []
+
                 if self.number == 0:
                     lock.acquire()
                     var.Letter = self.generator()
                     lock.release()
                     self.send(var.Letter)
                     var.wait =1
+                    var.wait1 =0
                 else:
                     while True:
 
@@ -47,21 +49,20 @@ class ThreadServer(threading.Thread):
                 var.main_vector.append(vector)
                 while True:
                     a = numpy.shape(var.main_vector)
-                    if a[0] == var.current_players:  # spradza czy wszyscy wysłali
+                    if a[0] == var.current_players:  # spradza czy wsz  yscy wysłali
                         break
 
                 if self.number == 0:
-                    print(var.main_vector)
                     self.send_pickle(var.main_vector)
                     var.main_vector = self.recv_pickle()
+                    temp = self.check2(self.check3(self.check1(var.main_vector)))
+                    temp1 = self.create_score(temp)
+                    var.score = temp1
+
                 else:
                     self.send("Sprawdzanie wyników")
-                    log.info("Information sent")
-
-                temp = self.check2(self.check3(self.check1(var.main_vector)))
-                temp1 = self.create_score(temp)
-                self.send("DONE")
-                self.send_pickle(temp1)
+                    time.sleep(3)
+                self.send_pickle(var.score)
                 log.info("Score was sent to clients")
             except:
                 print("Lost connection ")
@@ -130,14 +131,6 @@ class ThreadServer(threading.Thread):
     def ID_attend(self,number):
         var.Player_ID.append(number)
         return var.Player_ID
-
-    def connection(self):
-        clients1, address = self.s.accept()
-        self.clientsocket = clients1
-        self.address = address
-        print("Connection from :", self.address)
-        log.info("Connected with" + str(self.address))
-        return self.clientsocket, self.address
 
     def send_pickle(self, data):
         self.clientsocket.send(pickle.dumps(data))

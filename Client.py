@@ -48,15 +48,12 @@ while msg != "no":
         print(session.recv())
         log.info("Waiting for points")
 
-    if session.recv() == 'DONE':
-        points = session.recvPoints()
-        log.info("Points received")
-        #display points
-        print("Your score: " + session.findMyPoint(points) + "\n")
-        log.info("Player's points received")
-    else:
-        print('Cannot receive scores!')
-        log.info('Player ' + session.ID + ' cannot receive scores')
+    points = session.recvPoints()
+    print(points)
+    log.info("Points received")
+    #display points
+    print("Your score: " + str(session.findMyPoint(points) )+ "\n")
+    log.info("Player's points received")
     print("Would u like to play again? / \"no\" for not")
     msg = input()
 
