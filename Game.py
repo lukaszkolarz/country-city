@@ -46,5 +46,3 @@ class Game(net.Network):
             if i[0] == self.nick:
                 self.score += i[1]
                 return str(self.score)
-        log.info("No score available!")
-        return "Error"
