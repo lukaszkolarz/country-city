@@ -49,7 +49,7 @@ class ThreadServer(threading.Thread):
                 var.main_vector.append(vector)
                 while True:
                     a = numpy.shape(var.main_vector)
-                    if a[0] == var.current_players:  # spradza czy wsz  yscy wysłali
+                    if a[0] == var.current_players:  # spradza czy wsz yscy wysłali
                         break
 
                 if self.number == 0:
@@ -61,7 +61,9 @@ class ThreadServer(threading.Thread):
 
                 else:
                     self.send("Sprawdzanie wyników")
-                    time.sleep(3)
+                    while (numpy.shape(var.score)[0] == 0):
+                        time.sleep(0.5)
+                    #time.sleep(3)
                 self.send_pickle(var.score)
                 log.info("Score was sent to clients")
             except:

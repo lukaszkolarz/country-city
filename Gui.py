@@ -133,8 +133,9 @@ class Gui(ttk.Frame):
             log.info("Received to check")
             self.buildForCheck()
         else:
-            label = session.recv()
-            wait = ttk.Label(self, text=label, font="Arial 15 bold")
+            print(session.recv())
+            log.info("Waiting for points")
+            wait = ttk.Label(self, text="Checking scores...", font="Arial 15 bold")
             wait.place(relx=0.5, rely=0.5, anchor=CENTER)
             self.score()
 
@@ -156,7 +157,6 @@ class Gui(ttk.Frame):
 
     def score(self):
         self.destroy()
-        session.recv()
         points = session.recvPoints()
         log.info("Points received")
         y = 10
@@ -167,7 +167,7 @@ class Gui(ttk.Frame):
                 check.place(x=x, y=y)
                 x += 70
             y += 40
-        selfScore = ttk.Label(self, text="Your score: " + session.findMyPoint(points), font="Arial 10 bold")
+        selfScore = ttk.Label(self, text="Your score: " + str(session.findMyPoint(points)), font="Arial 10 bold")
         selfScore.place(x=0, y=400)
         log.info("Player's points received")
         question = ttk.Label(self, text="Would you like to play again?", font="Arial 10")
