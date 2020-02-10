@@ -47,6 +47,7 @@ class ThreadServer(threading.Thread):
                 vector = self.recv_pickle()
                 print(vector)
                 var.main_vector.append(vector)
+                var.score = []
                 while True:
                     a = numpy.shape(var.main_vector)
                     if a[0] == var.current_players:  # spradza czy wsz yscy wysłali
