@@ -7,9 +7,6 @@ import var
 from threading import Lock
 import time
 lock = Lock()
-score = []
-wait1 = 0
-main_vector = []
 log.basicConfig(filename="server.log", level=log.DEBUG)
 class ThreadServer(threading.Thread):
 
@@ -20,8 +17,6 @@ class ThreadServer(threading.Thread):
         self.number = number
 
     def run(self):
-        global wait1
-        global main_vector
         self.send("Connected with server")
         self.send(str(self.number))  # send(str(player))
         print(str(self.number))
@@ -31,7 +26,7 @@ class ThreadServer(threading.Thread):
 
         while True:
             try:
-                main_vector = []
+                var.main_vector = []
 
                 if self.number == 0:
                     lock.acquire()
@@ -39,6 +34,7 @@ class ThreadServer(threading.Thread):
                     lock.release()
                     self.send(var.Letter)
                     var.wait =1
+                    var.wait1 =0
                 else:
                     while True:
 
@@ -50,35 +46,27 @@ class ThreadServer(threading.Thread):
                 print(var.Letter)
                 vector = self.recv_pickle()
                 print(vector)
-                main_vector.append(vector)
+                var.main_vector.append(vector)
+                var.score = []
                 while True:
-                    a = numpy.shape(main_vector)
+                    a = numpy.shape(var.main_vector)
                     if a[0] == var.current_players:  # spradza czy wsz yscy wysłali
                         break
 
                 if self.number == 0:
-                    self.send_pickle(main_vector)
-                    lock.acquire()
+                    self.send_pickle(var.main_vector)
                     var.main_vector = self.recv_pickle()
-                    lock.release()
-                    temp = self.check2(self.check3(self.check1(main_vector)))
+                    temp = self.check2(self.check3(self.check1(var.main_vector)))
                     temp1 = self.create_score(temp)
-                    score = temp1
-                    wait1 = 1
+                    var.score = temp1
+
                 else:
                     self.send("Sprawdzanie wyników")
-                    while (wait1 == 0):
+                    while (numpy.shape(var.score)[0] == 0):
                         time.sleep(0.5)
-                    lock.acquire()
-                    temp = self.check2(self.check3(self.check1(main_vector)))
-                    temp1 = self.create_score(temp)
-                    score = temp1
-                    lock.release()
                     #time.sleep(3)
-                self.send_pickle(score)
-                print(score)
+                self.send_pickle(var.score)
                 log.info("Score was sent to clients")
-                time.sleep(1)
             except:
                 print("Lost connection ")
                 self.clientsocket.close()
@@ -164,3 +152,5 @@ class ThreadServer(threading.Thread):
         msg = self.clientsocket.recv(2048).decode("utf-8")
         log.info("Client " + str(self.number) + " information received")
         return msg
+
+

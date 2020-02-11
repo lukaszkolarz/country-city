@@ -43,5 +43,7 @@ def main_program():
         client = gm.ThreadServer(ID,client,address)
         client.start()
 
-with daemon.DaemonContext():
-    main_program()
+#with daemon.DaemonContext():
+#    main_program()
+main_program()
+
