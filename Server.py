@@ -3,7 +3,6 @@ import Game_For_Sever as gm
 import random
 import socket as sc
 import logging as log
-import daemon
 
 log.basicConfig(filename="server.log", level=log.DEBUG)
 
@@ -43,7 +42,6 @@ def main_program():
         client = gm.ThreadServer(ID,client,address)
         client.start()
 
-#with daemon.DaemonContext():
-#    main_program()
 main_program()
+
 
